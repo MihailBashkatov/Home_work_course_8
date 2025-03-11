@@ -10,4 +10,5 @@ urlpatterns = [
             namespace="materials",
         ),
     ),
+    path("", include("users.urls", namespace="users")),
 ]
