@@ -4,7 +4,7 @@ from users.models import User
 from users.serializers import UserSerializer
 
 
-class UserCreateAPIView(generics. CreateAPIView):
+class UserCreateAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
 
