@@ -1,15 +1,15 @@
 from django.db import models
 
+
 class Course(models.Model):
-    """ Registering model Course """
+    """Registering model Course"""
+
     name = models.CharField(
         max_length=300,
         verbose_name="Name",
     )
 
-    description = models.TextField(
-        verbose_name="Description"
-    )
+    description = models.TextField(verbose_name="Description")
 
     preview = models.ImageField(
         upload_to="materials/course/preview/%Y/%m/%d/",
@@ -25,19 +25,20 @@ class Course(models.Model):
     class Meta:
         verbose_name = "Course"
         verbose_name_plural = "Courses"
-        ordering = ["name",]
+        ordering = [
+            "name",
+        ]
 
 
 class Lesson(models.Model):
-    """ Registering model Lesson """
+    """Registering model Lesson"""
+
     name = models.CharField(
         max_length=300,
         verbose_name="Name",
     )
 
-    description = models.TextField(
-        verbose_name="Description"
-    )
+    description = models.TextField(verbose_name="Description")
 
     preview = models.ImageField(
         upload_to="materials/lessons/preview/%Y/%m/%d/",
@@ -47,7 +48,13 @@ class Lesson(models.Model):
         verbose_name="Saved course preview",
     )
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=False, blank=False, related_name="lessons")
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name="lessons",
+    )
 
     def __str__(self):
         return f"{self.name}"
@@ -55,4 +62,6 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "Lesson"
         verbose_name_plural = "Lessons"
-        ordering = ["name",]
+        ordering = [
+            "name",
+        ]
