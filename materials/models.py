@@ -47,7 +47,7 @@ class Lesson(models.Model):
         verbose_name="Saved course preview",
     )
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True, related_name="lessons")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=False, blank=False, related_name="lessons")
 
     def __str__(self):
         return f"{self.name}"
