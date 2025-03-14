@@ -54,7 +54,7 @@ class Payment(models.Model):
         related_name="payments",
     )
 
-    payment_date = models.DateField(auto_now=True, verbose_name="Payment date")
+    payment_date = models.DateField(auto_now=False, verbose_name="Payment date")
 
     payment_summ = models.FloatField(verbose_name="Payment Summ")
 
