@@ -17,7 +17,7 @@ class Command(BaseCommand):
             name="Python", description="Python Description"
         )
         paid_course_sql, _ = Course.objects.get_or_create(
-            name="Python", description="SQL Description"
+            name="SQL", description="SQL Description"
         )
 
         paid_lesson_1, _ = Lesson.objects.get_or_create(
