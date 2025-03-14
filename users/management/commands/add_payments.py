@@ -21,29 +21,43 @@ class Command(BaseCommand):
         )
 
         paid_lesson_1, _ = Lesson.objects.get_or_create(
-            name="Test Lesson Python 1", description="1 Test Description lesson python", course=paid_course_python
+            name="Test Lesson Python 1",
+            description="1 Test Description lesson python",
+            course=paid_course_python,
         )
 
         paid_lesson_2, _ = Lesson.objects.get_or_create(
-            name="Test Lesson Python 2", description="2 Test Description lesson python", course=paid_course_python
+            name="Test Lesson Python 2",
+            description="2 Test Description lesson python",
+            course=paid_course_python,
         )
         paid_lesson_3, _ = Lesson.objects.get_or_create(
-            name="Test Lesson SQL 1", description="1 Test Description lesson SQL", course=paid_course_sql
+            name="Test Lesson SQL 1",
+            description="1 Test Description lesson SQL",
+            course=paid_course_sql,
         )
 
         paid_lesson_4, _ = Lesson.objects.get_or_create(
-            name="Test Lesson SQL 2", description="2 Test Description lesson SQL", course=paid_course_sql
+            name="Test Lesson SQL 2",
+            description="2 Test Description lesson SQL",
+            course=paid_course_sql,
         )
         paid_lesson_5, _ = Lesson.objects.get_or_create(
-            name="Test Lesson Python 3", description="3 Test Description lesson python", course=paid_course_python
+            name="Test Lesson Python 3",
+            description="3 Test Description lesson python",
+            course=paid_course_python,
         )
 
         paid_lesson_6, _ = Lesson.objects.get_or_create(
-            name="Test Lesson SQL 3", description="3 Test Description lesson SQL", course=paid_course_sql
+            name="Test Lesson SQL 3",
+            description="3 Test Description lesson SQL",
+            course=paid_course_sql,
         )
         user, _ = User.objects.get_or_create(email="user@user.com")
 
-        another_user, _ = User.objects.get_or_create(email="anotheruser@anotheruser.com")
+        another_user, _ = User.objects.get_or_create(
+            email="anotheruser@anotheruser.com"
+        )
 
         payments = [
             {
@@ -100,4 +114,3 @@ class Command(BaseCommand):
             Payment.objects.get_or_create(**payment_data)
 
         self.stdout.write(self.style.SUCCESS(f"Successfully added 6 test payments")),
-

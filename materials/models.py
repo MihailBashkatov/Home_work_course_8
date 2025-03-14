@@ -48,7 +48,7 @@ class Lesson(models.Model):
         verbose_name="Saved course preview",
     )
 
-    url_link = models.URLField(max_length = 200, null=True, blank=True)
+    url_link = models.URLField(max_length=200, null=True, blank=True)
 
     course = models.ForeignKey(
         Course,
