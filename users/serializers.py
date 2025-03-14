@@ -23,3 +23,21 @@ class PaymentSerializer(serializers.ModelSerializer):
             "paid_course",
             "paid_lesson",
         ]
+
+
+class UserPaymentsSerializer(serializers.ModelSerializer):
+    payments = PaymentSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = ["email", "payments"]
+
+    def create(self, validated_data):
+        payments_set = validated_data.pop("payments")
+
+        user_object = User.objects.create(**validated_data)
+
+        for payment in payments_set:
+            Payment.objects.create(user=user_object, **payment)
+
+        return user_object
