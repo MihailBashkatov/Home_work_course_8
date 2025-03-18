@@ -1,3 +1,14 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import User
+
+
+# Register admin for Receiver model
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    """ Registering User in Admin """
+    list_display = (
+        "id",
+        "email",
+
+    )
