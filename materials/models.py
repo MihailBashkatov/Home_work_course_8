@@ -75,6 +75,7 @@ class Lesson(models.Model):
         blank=True,
         related_name="users_lessons",
     )
+
     def __str__(self):
         return f"{self.name}"
 

@@ -1,13 +1,15 @@
 from rest_framework import permissions
 
+
 class ModeratorAccessPermission(permissions.BasePermission):
     """
     Check if user is in Group Moderators
     """
-    message = 'Adding permissions for moderators.'
+
+    message = "Adding permissions for moderators."
 
     def has_permission(self, request, view):
-        return request.user.groups.filter(name='Moderators').exists()
+        return request.user.groups.filter(name="Moderators").exists()
 
 
 class IsOwner(permissions.BasePermission):
