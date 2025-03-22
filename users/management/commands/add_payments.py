@@ -16,8 +16,7 @@ class Command(BaseCommand):
         Lesson.objects.all().delete()
         Group.objects.all().delete()
 
-
-        create_user() #Creating users in database
+        create_user()  # Creating users in database
 
         user_1 = User.objects.get(email="user1@user.com")
         user_2 = User.objects.get(email="user2@user.com")
@@ -26,12 +25,12 @@ class Command(BaseCommand):
         user_5 = User.objects.get(email="user5@user.com")
 
         # Creating group Moderators
-        moderators = Group.objects.create(name='Moderators')
+        moderators = Group.objects.create(name="Moderators")
         user_1.groups.add(moderators)
 
-
         paid_course_python, _ = Course.objects.get_or_create(
-            name="Python", description="Python Description", owner=user_1)
+            name="Python", description="Python Description", owner=user_1
+        )
         paid_course_sql, _ = Course.objects.get_or_create(
             name="SQL", description="SQL Description", owner=user_2
         )
@@ -43,43 +42,41 @@ class Command(BaseCommand):
             name="Test Lesson Python 1",
             description="1 Test Description lesson python",
             course=paid_course_python,
-            owner=user_1
+            owner=user_1,
         )
 
         paid_lesson_2, _ = Lesson.objects.get_or_create(
             name="Test Lesson Python 2",
             description="2 Test Description lesson python",
             course=paid_course_python,
-            owner=user_1
+            owner=user_1,
         )
         paid_lesson_3, _ = Lesson.objects.get_or_create(
             name="Test Lesson SQL 1",
             description="1 Test Description lesson SQL",
             course=paid_course_sql,
-            owner=user_2
+            owner=user_2,
         )
 
         paid_lesson_4, _ = Lesson.objects.get_or_create(
             name="Test Lesson SQL 2",
             description="2 Test Description lesson SQL",
             course=paid_course_sql,
-            owner=user_2
+            owner=user_2,
         )
         paid_lesson_5, _ = Lesson.objects.get_or_create(
             name="Test Lesson English 1",
             description="3 Test Description lesson english",
             course=paid_course_eng,
-            owner=user_3
+            owner=user_3,
         )
 
         paid_lesson_6, _ = Lesson.objects.get_or_create(
             name="Test Lesson Eng 3",
             description="3 Test Description lesson English",
             course=paid_course_eng,
-            owner=user_3
+            owner=user_3,
         )
-
-
 
         payments = [
             {
@@ -143,4 +140,6 @@ class Command(BaseCommand):
         for payment_data in payments:
             Payment.objects.get_or_create(**payment_data)
 
-        self.stdout.write(self.style.SUCCESS(f"Successfully added {len(payments)} test payments")),
+        self.stdout.write(
+            self.style.SUCCESS(f"Successfully added {len(payments)} test payments")
+        ),

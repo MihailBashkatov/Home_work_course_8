@@ -10,6 +10,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     list_display = ("id", "name", "owner")
 
+
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
     """Registering User in Admin"""
