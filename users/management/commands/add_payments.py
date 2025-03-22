@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.core.management import BaseCommand
 
 from materials.models import Course, Lesson
@@ -9,10 +10,12 @@ class Command(BaseCommand):
     help = "Add test payments to the database"
 
     def handle(self, *args, **kwargs):
-        # Удаляем существующие записи
+        # Delete Data from database
         User.objects.all().delete()
         Course.objects.all().delete()
         Lesson.objects.all().delete()
+        Group.objects.all().delete()
+
 
         create_user() #Creating users in database
 
@@ -21,6 +24,11 @@ class Command(BaseCommand):
         user_3 = User.objects.get(email="user3@user.com")
         user_4 = User.objects.get(email="user4@user.com")
         user_5 = User.objects.get(email="user5@user.com")
+
+        # Creating group Moderators
+        moderators = Group.objects.create(name='Moderators')
+        user_1.groups.add(moderators)
+
 
         paid_course_python, _ = Course.objects.get_or_create(
             name="Python", description="Python Description", owner=user_1)
