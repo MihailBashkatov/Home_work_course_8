@@ -61,8 +61,6 @@ class LessonListAPIView(generics.ListAPIView):
         else:
             return Lesson.objects.filter(owner=self.request.user)
 
-
-
     def get(self, request):
         queryset = Lesson.objects.all()
         paginated_queryset = self.paginate_queryset(queryset)
