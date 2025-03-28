@@ -85,3 +85,35 @@ class Lesson(models.Model):
         ordering = [
             "name",
         ]
+
+
+class Subscription(models.Model):
+    """Registering model Subscription"""
+
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="users_subscription",
+    )
+
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="course_subscription",
+
+        )
+
+    subscription = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user} for course {self.course}"
+
+    class Meta:
+        verbose_name = "Subscription"
+        verbose_name_plural = "Subscriptions"
+
