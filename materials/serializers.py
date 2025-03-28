@@ -9,8 +9,8 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
-        validators = [
-            LinkValidator(field=['url_link'])]
+        validators = [LinkValidator(field=["url_link"])]
+
 
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,13 +23,10 @@ class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer(many=True, read_only=True)
     subscription = serializers.SerializerMethodField()
 
-
-
     @staticmethod
     def get_lessons_count(course):
         """Getting amount of lessons per course"""
         return course.lessons.all().count()
-
 
     @staticmethod
     def get_subscription(course):
@@ -37,8 +34,6 @@ class CourseSerializer(serializers.ModelSerializer):
         if course.course_subscription.first():
             return course.course_subscription.first().subscription
 
-
     class Meta:
         model = Course
         fields = ["name", "owner", "subscription", "lessons_count", "lessons"]
-

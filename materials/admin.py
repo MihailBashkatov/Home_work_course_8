@@ -17,8 +17,9 @@ class LessonAdmin(admin.ModelAdmin):
 
     list_display = ("id", "name", "owner")
 
+
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
     """Registering User in Subscription"""
 
-    list_display = ("id", "user", "course", 'subscription')
+    list_display = ("id", "user", "course", "subscription")

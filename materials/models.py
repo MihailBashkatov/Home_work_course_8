@@ -90,7 +90,6 @@ class Lesson(models.Model):
 class Subscription(models.Model):
     """Registering model Subscription"""
 
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -105,8 +104,7 @@ class Subscription(models.Model):
         null=True,
         blank=True,
         related_name="course_subscription",
-
-        )
+    )
 
     subscription = models.BooleanField(default=False)
 
@@ -116,4 +114,3 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = "Subscription"
         verbose_name_plural = "Subscriptions"
-
