@@ -1,8 +1,12 @@
-from rest_framework import generics, viewsets
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, status, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from materials.models import Course, Lesson
-from materials.serializers import CourseSerializer, LessonSerializer
+from materials.models import Course, Lesson, Subscription
+from materials.serializers import (CourseSerializer, LessonSerializer,
+                                   SubscriptionSerializer)
 from users.permissions import IsOwner, ModeratorAccessPermission
 
 
@@ -71,3 +75,35 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwner | ~ModeratorAccessPermission]
+
+
+class SubscribeAPIView(APIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+
+    def post(self, request):
+        user = request.user
+        course_id = request.data.get("course")
+        course = get_object_or_404(Course, id=course_id)
+
+        subscription, created = Subscription.objects.get_or_create(
+            user=user, course=course
+        )
+
+        if subscription.subscription == False:
+            subscription.subscription = True
+            subscription.save()
+            message = "Subscription Added"
+
+        elif subscription.subscription == True:
+            subscription.subscription = False
+            subscription.save()
+            message = "Subscription Deleted"
+
+        return Response({"message": {message}}, status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        user = request.user
+        subscriptions = Subscription.objects.filter(user=user)
+        serializer = SubscriptionSerializer(subscriptions, many=True)
+        return Response(serializer.data)
