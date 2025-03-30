@@ -15,14 +15,7 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Payment
-        fields = [
-            "user",
-            "payment_date",
-            "payment_summ",
-            "payment_mode",
-            "paid_course",
-            "paid_lesson",
-        ]
+        fields = '__all__'
 
 
 class UserPaymentsSerializer(serializers.ModelSerializer):
