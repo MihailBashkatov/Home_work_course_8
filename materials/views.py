@@ -1,13 +1,19 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from materials.models import Course, Lesson, Subscription
 from materials.paginators import MyPagination
-from materials.serializers import (CourseSerializer, LessonSerializer,
-                                   SubscriptionSerializer)
+from materials.serializers import (
+    CourseSerializer,
+    LessonSerializer,
+    SubscriptionSerializer,
+)
+from materials.task import send_update_course_info
+from materials.utils import get_users_subscribed, get_course
 from users.permissions import IsOwner, ModeratorAccessPermission
 
 
@@ -18,6 +24,24 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        """Overwrite a method with adding logic to send emails for subscribed users in case of updating info for particular course"""
+        partial = kwargs.pop("partial", False)
+        course = self.get_object()  # get current course
+        serializer = self.get_serializer(course, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        users_list = get_users_subscribed(course.id)  # gets list of subscribed users
+        course_name = course.name  # gets course name
+        if users_list:
+            # sending mail to the subscribed users for particular course
+            send_update_course_info.delay(
+                users_list, course_name
+            )
+
+        return Response(serializer.data)
 
     def get_queryset(self):
         if ModeratorAccessPermission().has_permission(self.request, self):
