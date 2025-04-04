@@ -1,5 +1,7 @@
 from django.db import models
 
+from config import settings
+
 
 class Course(models.Model):
     """Registering model Course"""
@@ -17,6 +19,14 @@ class Course(models.Model):
         null=True,
         blank=True,
         verbose_name="Saved course preview",
+    )
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="users_courses",
     )
 
     def __str__(self):
@@ -56,6 +66,14 @@ class Lesson(models.Model):
         null=False,
         blank=False,
         related_name="lessons",
+    )
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="users_lessons",
     )
 
     def __str__(self):

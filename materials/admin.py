@@ -1,3 +1,18 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Course, Lesson
+
+
+# Register admin for Receiver model
+@admin.register(Course)
+class CourseAdmin(admin.ModelAdmin):
+    """Registering User in Admin"""
+
+    list_display = ("id", "name", "owner")
+
+
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    """Registering User in Admin"""
+
+    list_display = ("id", "name", "owner")
