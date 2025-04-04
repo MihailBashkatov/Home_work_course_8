@@ -48,20 +48,20 @@ class Payment(models.Model):
 
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="payments",
     )
 
-    payment_date = models.DateField(auto_now=False, verbose_name="Payment date")
+    payment_date = models.DateField(auto_now=True, verbose_name="Payment date")
 
     payment_summ = models.FloatField(verbose_name="Payment Summ")
 
     payment_mode = models.CharField(
         max_length=4,
         choices=STATUS_CHOICES,
-        default=CASH,
+        default=CARD,
         verbose_name="Payment mode",
     )
 
@@ -80,6 +80,10 @@ class Payment(models.Model):
         blank=True,
         related_name="paid_lesson",
     )
+
+    session_id = models.CharField(max_length=400, blank=True, null=True, verbose_name='Link to the session')
+
+    link = models.URLField(max_length=400, blank=True, null=True, verbose_name='Link to the session')
 
     def __str__(self):
 
