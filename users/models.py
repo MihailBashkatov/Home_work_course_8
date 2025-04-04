@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from materials.models import Course, Lesson
+
 
 class User(AbstractUser):
     """Registering model User"""
@@ -31,3 +33,63 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Payment(models.Model):
+    """Registering model Payment"""
+
+    CASH = "Cash"
+    CARD = "Card"
+
+    STATUS_CHOICES = [
+        (CASH, "Cash"),
+        (CARD, "Card"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="payments",
+    )
+
+    payment_date = models.DateField(auto_now=False, verbose_name="Payment date")
+
+    payment_summ = models.FloatField(verbose_name="Payment Summ")
+
+    payment_mode = models.CharField(
+        max_length=4,
+        choices=STATUS_CHOICES,
+        default=CASH,
+        verbose_name="Payment mode",
+    )
+
+    paid_course = models.ForeignKey(
+        Course,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="paid_course",
+    )
+
+    paid_lesson = models.ForeignKey(
+        Lesson,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="paid_lesson",
+    )
+
+    def __str__(self):
+
+        if self.paid_course and self.paid_lesson:
+            return f"Course: {self.paid_course}, lesson: {self.paid_lesson}"
+        elif self.paid_course:
+            return self.paid_course
+        else:
+            return self.paid_lesson
+
+    class Meta:
+        verbose_name = "Payment"
+        verbose_name_plural = "Payments"
