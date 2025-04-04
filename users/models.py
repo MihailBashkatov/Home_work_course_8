@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -20,6 +22,7 @@ class User(AbstractUser):
         blank=True,
         verbose_name="Saved user image",
     )
+    last_login = models.DateTimeField(null=False, blank=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
