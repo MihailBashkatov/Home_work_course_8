@@ -22,7 +22,7 @@ class User(AbstractUser):
         blank=True,
         verbose_name="Saved user image",
     )
-    last_login = models.DateTimeField(null=False, blank=False)
+    last_login = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
