@@ -1,0 +1,6 @@
+1. Write here 1 or 2: ___
+2. In the terminal insert:
+git commit . -m 'Push project'
+
+
+
