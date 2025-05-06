@@ -1,6 +1,7 @@
-1. Write here 1 or 2: ___
+1. Write here 1 or 2: _1
 2. In the terminal insert:
 git commit . -m 'Push project'
+git push
 
 
 
