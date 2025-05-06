@@ -1,8 +1,33 @@
+# Downloading image python
+FROM python:3.11-slim
 
-FROM nginx:latest
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN pip install --upgrade pip
 
-COPY html/ /usr/share/nginx/html
+# Set up working directory
+WORKDIR /app
 
-EXPOSE 80
+## System dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Requirements.txt
+COPY requirements.txt .
+
+# Setup requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app files
+COPY . .
+
+
+# Create directory for mediafiles
+RUN mkdir -p /app/media
+
+# Set up [ort for Django
+EXPOSE 8000

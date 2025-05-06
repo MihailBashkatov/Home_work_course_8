@@ -11,7 +11,9 @@ class CourseTestCase(APITestCase):
     def setUp(self) -> None:
         self.owner = User.objects.create(email="user@user.com")
         self.course = Course.objects.create(
-            name="test_course", description="test_course_description", owner=self.owner
+            name="test_course",
+            description="test_course_description",
+            owner=self.owner
         )
 
         self.lesson = Lesson.objects.create(
@@ -32,7 +34,8 @@ class CourseTestCase(APITestCase):
 
     def test_course_create(self):
         url = reverse("materials:courses-list")
-        data = {"name": "Second Test", "description": "description_second_test"}
+        data = {"name": "Second Test",
+                "description": "description_second_test"}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -57,24 +60,33 @@ class CourseTestCase(APITestCase):
         response = self.client.get(url)
         data = response.json()
         result = [
-            {
-                "name": self.course.name,
-                "owner": self.owner.pk,
-                "subscription": None,
-                "lessons_count": 1,
-                "lessons": [
                     {
-                        "id": self.lesson.pk,
-                        "name": self.lesson.name,
-                        "description": self.lesson.description,
-                        "preview": None,
-                        "url_link": None,
-                        "course": self.course.pk,
+                        "id": 4,
+                        "name": self.course.name,
                         "owner": self.owner.pk,
+                        "description": self.course.description,
+                        "subscription": None,
+                        "lessons_count": 1,
+                        "lessons": [
+                                        {
+                                            "id":
+                                                self.lesson.pk,
+                                            "name":
+                                                self.lesson.name,
+                                            "description":
+                                                self.lesson.description,
+                                            "preview":
+                                                None,
+                                            "url_link":
+                                                None,
+                                            "course":
+                                                self.course.pk,
+                                            "owner":
+                                                self.owner.pk,
+                                        }
+                                    ],
                     }
-                ],
-            }
-        ]
+                ]
 
         self.assertEqual(Course.objects.all().count(), 1)
 
@@ -86,7 +98,9 @@ class LessonTestCase(APITestCase):
     def setUp(self) -> None:
         self.owner = User.objects.create(email="user@user.com")
         self.course = Course.objects.create(
-            name="test_course", description="test_course_description", owner=self.owner
+            name="test_course",
+            description="test_course_description",
+            owner=self.owner
         )
 
         self.lesson = Lesson.objects.create(
@@ -162,11 +176,15 @@ class SubscriptionTestCase(APITestCase):
     def setUp(self) -> None:
         self.user = User.objects.create(email="user@user.com")
         self.course = Course.objects.create(
-            name="test_course", description="test_course_description", owner=self.user
+            name="test_course",
+            description="test_course_description",
+            owner=self.user
         )
 
         self.subscription = Subscription.objects.create(
-            user=self.user, course=self.course, subscription=False
+            user=self.user,
+            course=self.course,
+            subscription=False
         )
 
         self.client.force_authenticate(user=self.user)
