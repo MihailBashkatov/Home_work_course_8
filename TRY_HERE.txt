@@ -1,7 +1,10 @@
-1. Write here 1 or 2: _1
+1. Write here 1 or 2: _2
 2. In the terminal insert:
 git commit . -m 'Push project'
 git push
 
+
+1. Create new directory
+mkdir <directory_name>
 
 
