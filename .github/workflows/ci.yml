@@ -150,6 +150,6 @@ jobs:
             docker run hello-world
             docker compose down
             docker container rm $(docker ps -a -q)
-#            docker compose up -d --build
+
 
           EOF
