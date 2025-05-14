@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  web:
+    restart: always
+    image: miahilus/online_course_project:latest
+    container_name: course_8
+    command: bash -c "python manage.py collectstatic --noinput && python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+
+    env_file:
+      - ./.env
+    volumes:
+      - static_volume:/app/staticfiles
+    expose:
+      - "8000"
+    depends_on:
+          db:
+            condition: service_healthy
+
+  nginx:
+    image: miahilus/nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/app/staticfiles
+    depends_on:
+      - web
+
+  db:
+    image: postgres:16
+    restart: always
+    container_name: psgr
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    env_file:
+      - ./.env
+
+volumes:
+  postgres_data:
+  static_volume:
+  redis_data:

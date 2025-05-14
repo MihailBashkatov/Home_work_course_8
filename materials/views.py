@@ -6,8 +6,13 @@ from rest_framework.views import APIView
 
 from materials.models import Course, Lesson, Subscription
 from materials.paginators import MyPagination
-from materials.serializers import (CourseSerializer, LessonSerializer,
-                                   SubscriptionSerializer)
+from materials.serializers import (
+    CourseSerializer,
+    LessonSerializer,
+    SubscriptionSerializer,
+)
+from materials.task import send_update_course_info
+from materials.utils import get_users_subscribed
 from users.permissions import IsOwner, ModeratorAccessPermission
 
 
@@ -19,6 +24,30 @@ class CourseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def update(self, request, *args, **kwargs):
+        """Overwrite a method with adding logic to send emails
+        for subscribed users in case of updating info for particular course"""
+        partial = kwargs.pop("partial", False)
+        course = self.get_object()  # get current course
+        serializer = self.get_serializer(course,
+                                         data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        # gets list of subscribed users
+        users_list = get_users_subscribed(course.id)
+
+        # gets course name
+        course_name = course.name
+        if users_list:
+
+            # sending mail to the subscribed users for particular course
+            send_update_course_info.delay(
+                users_list, course_name
+            )
+
+        return Response(serializer.data)
+
     def get_queryset(self):
         if ModeratorAccessPermission().has_permission(self.request, self):
             return Course.objects.all()
@@ -27,7 +56,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == "create":
-            self.permission_classes = [~ModeratorAccessPermission, IsAuthenticated]
+            self.permission_classes = [~ModeratorAccessPermission,
+                                       IsAuthenticated]
         elif self.action in ["update", "partial_update", "retrieve", "list"]:
             self.permission_classes = [
                 IsAuthenticated,
@@ -82,7 +112,8 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = [IsAuthenticated, IsOwner | ~ModeratorAccessPermission]
+    permission_classes = [IsAuthenticated,
+                          IsOwner | ~ModeratorAccessPermission]
 
 
 class SubscribeAPIView(APIView):
@@ -98,12 +129,12 @@ class SubscribeAPIView(APIView):
             user=user, course=course
         )
 
-        if subscription.subscription == False:
+        if not subscription.subscription:
             subscription.subscription = True
             subscription.save()
             message = "Subscription Added"
 
-        elif subscription.subscription == True:
+        elif subscription.subscription:
             subscription.subscription = False
             subscription.save()
             message = "Subscription Deleted"
